@@ -1,0 +1,8 @@
+flask
+gunicorn
+blinker
+click
+itsdangerous
+jinja2
+markupsafe
+werkzeug

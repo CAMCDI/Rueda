@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WheelMaster A* | Optimización de Ruedas</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap"
+        rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+
+<body>
+    <div class="glass-bg"></div>
+    <main class="container">
+        <header class="hero">
+            <div class="badge">Algoritmo A*</div>
+            <h1>Rueda<span>Óptima</span></h1>
+        </header>
+
+        <section class="matrix-section">
+            <div class="card">
+                <div class="card-header">
+                    <i data-lucide="table"></i>
+                    <h2>Matriz de Costos ($)</h2>
+                </div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Empresa</th>
+                                {% for wheel in wheel_types %}
+                                <th>{{ wheel }}</th>
+                                {% endfor %}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for i in range(companies|length) %}
+                            <tr>
+                                <td class="company-name">{{ companies[i] }}</td>
+                                {% for j in range(wheel_types|length) %}
+                                <td>{{ costs[i][j] }}</td>
+                                {% endfor %}
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <section class="action-section">
+            <button id="solve-btn" class="primary-btn">
+                <span class="btn-content">
+                    <i data-lucide="zap"></i>
+                    Ejecutar Optimización A*
+                </span>
+                <div class="btn-glow"></div>
+            </button>
+        </section>
+
+        <section id="results-section" class="results-section hidden">
+            <div class="results-grid">
+                <div class="card result-card">
+                    <div class="card-header">
+                        <i data-lucide="check-circle"></i>
+                        <h2>Solución Óptima</h2>
+                    </div>
+                    <div id="assignments-list" class="assignments-list">
+                        <!-- Assignments will be injected here -->
+                    </div>
+                    <div class="total-cost-container">
+                        <span class="label">Costo Total</span>
+                        <span id="total-cost" class="value">$0</span>
+                    </div>
+                </div>
+
+                <div class="card stats-card">
+                    <div class="card-header">
+                        <i data-lucide="bar-chart-3"></i>
+                        <h2>Estadísticas</h2>
+                    </div>
+                    <div class="stats-content">
+                        <div class="stat-item">
+                            <span class="stat-label">Nodos Explorados</span>
+                            <span id="nodes-explored" class="stat-value">0</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Tiempo de Ejecución</span>
+                            <span id="time-taken" class="stat-value">0s</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Heurística h(n)</span>
+                            <span class="stat-value">Admisible</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+
+</html>

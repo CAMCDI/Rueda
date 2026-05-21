@@ -36,17 +36,24 @@ class Nodo:
                 return True
         return False
 
-# Data
-companies = ["Empresa 1", "Empresa 2", "Empresa 3", "Empresa 4"]
-wheel_types = ["TIPO T", "TIPO H", "TIPO V", "TIPO W"]
-costs = [
+# Datos por defecto
+default_companies = ["Empresa 1", "Empresa 2", "Empresa 3", "Empresa 4"]
+default_wheel_types = ["TIPO T", "TIPO H", "TIPO V", "TIPO W"]
+default_costs = [
     [20, 30, 20, 40], # Empresa 1
     [50, 50, 40, 50], # Empresa 2
     [60, 55, 50, 60], # Empresa 3
     [100, 80, 60, 70] # Empresa 4
 ]
 
-def heuristica(datos):
+# Almacenamiento dinámico de datos
+custom_data = {
+    'companies': list(default_companies),
+    'wheel_types': list(default_wheel_types),
+    'costs': [row[:] for row in default_costs]
+}
+
+def heuristica(datos, companies, wheel_types, costs):
     num_assigned = len(datos)
     if num_assigned == len(wheel_types):
         return 0
@@ -64,7 +71,7 @@ def heuristica(datos):
             total_h += min_cost
     return total_h
 
-def buscar_solucion_A():
+def buscar_solucion_A(companies, wheel_types, costs):
     nodos_visitados = []
     nodos_frontera = []
     nodos_frontera.append(Nodo([]))
@@ -74,7 +81,7 @@ def buscar_solucion_A():
 
     while len(nodos_frontera) != 0:
         iterations += 1
-        nodos_frontera.sort(key=lambda x: x.get_costo() + heuristica(x.get_datos()))
+        nodos_frontera.sort(key=lambda x: x.get_costo() + heuristica(x.get_datos(), companies, wheel_types, costs))
         nodo = nodos_frontera.pop(0)
         nodos_visitados.append(nodo)
 
@@ -108,19 +115,57 @@ def buscar_solucion_A():
 
 @app.route('/')
 def index():
-    return render_template('index.html', companies=companies, wheel_types=wheel_types, costs=costs)
+    return render_template('index.html', 
+                         companies=custom_data['companies'], 
+                         wheel_types=custom_data['wheel_types'], 
+                         costs=custom_data['costs'])
+
+@app.route('/api/data', methods=['GET'])
+def get_data():
+    """Obtener datos actuales"""
+    return jsonify({
+        'companies': custom_data['companies'],
+        'wheel_types': custom_data['wheel_types'],
+        'costs': custom_data['costs']
+    })
+
+@app.route('/api/update', methods=['POST'])
+def update_data():
+    """Actualizar datos personalizados"""
+    data = request.get_json()
+    
+    if 'companies' in data:
+        custom_data['companies'] = data['companies']
+    if 'wheel_types' in data:
+        custom_data['wheel_types'] = data['wheel_types']
+    if 'costs' in data:
+        custom_data['costs'] = data['costs']
+    
+    return jsonify({'message': 'Datos actualizados exitosamente'})
+
+@app.route('/api/reset', methods=['POST'])
+def reset_data():
+    """Restablecer datos a valores por defecto"""
+    custom_data['companies'] = list(default_companies)
+    custom_data['wheel_types'] = list(default_wheel_types)
+    custom_data['costs'] = [row[:] for row in default_costs]
+    return jsonify({'message': 'Datos restablecidos'})
 
 @app.route('/solve', methods=['POST'])
 def solve():
-    nodo_solucion, nodes_explored, time_taken = buscar_solucion_A()
+    nodo_solucion, nodes_explored, time_taken = buscar_solucion_A(
+        custom_data['companies'], 
+        custom_data['wheel_types'], 
+        custom_data['costs']
+    )
     if nodo_solucion:
         resultado_indices = nodo_solucion.get_datos()
         assignments = []
         for i, comp_idx in enumerate(resultado_indices):
             assignments.append({
-                "wheel": wheel_types[i],
-                "company": companies[comp_idx],
-                "price": costs[comp_idx][i]
+                "wheel": custom_data['wheel_types'][i],
+                "company": custom_data['companies'][comp_idx],
+                "price": custom_data['costs'][comp_idx][i]
             })
         return jsonify({
             "success": True,

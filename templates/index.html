@@ -12,6 +12,7 @@
 </head>
 
 <body>
+    <div id="toast-container" class="toast-container"></div>
     <div class="glass-bg"></div>
     <main class="container">
         <header class="hero">
@@ -22,8 +23,34 @@
         <section class="matrix-section">
             <div class="card">
                 <div class="card-header">
-                    <i data-lucide="table"></i>
-                    <h2>Matriz de Costos ($)</h2>
+                    <div class="header-title">
+                        <i data-lucide="table"></i>
+                        <h2>Matriz de Costos ($)</h2>
+                    </div>
+                    <div class="matrix-actions">
+                        <button id="modify-btn" class="secondary-btn">
+                            <i data-lucide="edit-3"></i>
+                            Modificar Datos
+                        </button>
+                        <div id="edit-actions" class="edit-actions hidden">
+                            <button id="save-btn" class="save-btn">
+                                <i data-lucide="save"></i>
+                                Guardar
+                            </button>
+                            <button id="clear-btn" class="clear-btn">
+                                <i data-lucide="trash-2"></i>
+                                Limpiar
+                            </button>
+                            <button id="reset-btn" class="reset-btn">
+                                <i data-lucide="rotate-ccw"></i>
+                                Restablecer
+                            </button>
+                            <button id="cancel-btn" class="cancel-btn">
+                                <i data-lucide="x"></i>
+                                Cancelar
+                            </button>
+                        </div>
+                    </div>
                 </div>
                 <div class="table-container">
                     <table>
@@ -31,16 +58,25 @@
                             <tr>
                                 <th>Empresa</th>
                                 {% for wheel in wheel_types %}
-                                <th>{{ wheel }}</th>
+                                <th>
+                                    <span class="view-mode">{{ wheel }}</span>
+                                    <input type="text" class="edit-mode-input wheel-input hidden" value="{{ wheel }}" placeholder="{{ wheel }}">
+                                </th>
                                 {% endfor %}
                             </tr>
                         </thead>
                         <tbody>
                             {% for i in range(companies|length) %}
                             <tr>
-                                <td class="company-name">{{ companies[i] }}</td>
+                                <td class="company-name">
+                                    <span class="view-mode">{{ companies[i] }}</span>
+                                    <input type="text" class="edit-mode-input company-input hidden" value="{{ companies[i] }}" placeholder="{{ companies[i] }}">
+                                </td>
                                 {% for j in range(wheel_types|length) %}
-                                <td>{{ costs[i][j] }}</td>
+                                <td>
+                                    <span class="view-mode">{{ costs[i][j] }}</span>
+                                    <input type="number" class="edit-mode-input cost-input hidden" value="{{ costs[i][j] }}" min="0" placeholder="{{ costs[i][j] }}">
+                                </td>
                                 {% endfor %}
                             </tr>
                             {% endfor %}

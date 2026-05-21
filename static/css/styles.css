@@ -206,7 +206,7 @@ td:last-child {
 }
 
 .hidden {
-    display: none;
+    display: none !important;
 }
 
 .assignments-list {
@@ -325,7 +325,7 @@ td:last-child {
     align-items: center;
 }
 
-.secondary-btn, .save-btn, .clear-btn, .reset-btn, .cancel-btn {
+.secondary-btn, .save-btn, .clear-btn, .reset-btn, .cancel-btn, .add-btn {
     display: flex;
     align-items: center;
     gap: 0.5rem;
@@ -399,6 +399,19 @@ td:last-child {
     background: #7f8c8d;
     color: white;
     border-color: #7f8c8d;
+    transform: translateY(-1px);
+}
+
+.add-btn {
+    background: rgba(46, 204, 113, 0.1);
+    color: #27ae60;
+    border: 1.5px solid rgba(46, 204, 113, 0.3);
+}
+
+.add-btn:hover {
+    background: #27ae60;
+    color: white;
+    box-shadow: 0 4px 12px rgba(46, 204, 113, 0.2);
     transform: translateY(-1px);
 }
 
@@ -508,4 +521,76 @@ td:last-child {
 }
 .toast-warning i {
     color: #f39c12;
+}
+
+/* --- ADD / REMOVE BUTTONS --- */
+.add-buttons {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.add-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.7rem 1.4rem;
+    background: transparent;
+    color: var(--color1);
+    border: 2px dashed var(--color3);
+    border-radius: 50px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.add-btn:hover {
+    background: rgba(65, 128, 171, 0.08);
+    border-color: var(--color1);
+    transform: translateY(-1px);
+}
+
+.remove-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    background: rgba(231, 76, 60, 0.1);
+    color: #e74c3c;
+    border: none;
+    border-radius: 50%;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 1;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin-left: 6px;
+    flex-shrink: 0;
+}
+
+.remove-btn:hover {
+    background: #e74c3c;
+    color: white;
+    transform: scale(1.15);
+}
+
+.action-cell {
+    background: transparent !important;
+    border-radius: 0 !important;
+    width: 40px;
+    text-align: center;
+}
+
+th {
+    position: relative;
+}
+
+th .remove-btn {
+    position: absolute;
+    top: 2px;
+    right: 2px;
 }

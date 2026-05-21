@@ -53,35 +53,17 @@
                     </div>
                 </div>
                 <div class="table-container">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Empresa</th>
-                                {% for wheel in wheel_types %}
-                                <th>
-                                    <span class="view-mode">{{ wheel }}</span>
-                                    <input type="text" class="edit-mode-input wheel-input hidden" value="{{ wheel }}" placeholder="{{ wheel }}">
-                                </th>
-                                {% endfor %}
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for i in range(companies|length) %}
-                            <tr>
-                                <td class="company-name">
-                                    <span class="view-mode">{{ companies[i] }}</span>
-                                    <input type="text" class="edit-mode-input company-input hidden" value="{{ companies[i] }}" placeholder="{{ companies[i] }}">
-                                </td>
-                                {% for j in range(wheel_types|length) %}
-                                <td>
-                                    <span class="view-mode">{{ costs[i][j] }}</span>
-                                    <input type="number" class="edit-mode-input cost-input hidden" value="{{ costs[i][j] }}" min="0" placeholder="{{ costs[i][j] }}">
-                                </td>
-                                {% endfor %}
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
+                    <!-- Table rendered dynamically by JS -->
+                </div>
+                <div id="add-buttons" class="add-buttons hidden">
+                    <button id="add-row-btn" class="add-btn">
+                        <i data-lucide="plus-circle"></i>
+                        Agregar Empresa
+                    </button>
+                    <button id="add-col-btn" class="add-btn">
+                        <i data-lucide="plus-circle"></i>
+                        Agregar Tipo de Rueda
+                    </button>
                 </div>
             </div>
         </section>
@@ -100,22 +82,23 @@
             <div class="results-grid">
                 <div class="card result-card">
                     <div class="card-header">
-                        <i data-lucide="check-circle"></i>
-                        <h2>Solución Óptima</h2>
+                        <div class="header-title">
+                            <i data-lucide="check-circle"></i>
+                            <h2>Solución Óptima</h2>
+                        </div>
                     </div>
-                    <div id="assignments-list" class="assignments-list">
-                        <!-- Assignments will be injected here -->
-                    </div>
+                    <div id="assignments-list" class="assignments-list"></div>
                     <div class="total-cost-container">
                         <span class="label">Costo Total</span>
                         <span id="total-cost" class="value">$0</span>
                     </div>
                 </div>
-
                 <div class="card stats-card">
                     <div class="card-header">
-                        <i data-lucide="bar-chart-3"></i>
-                        <h2>Estadísticas</h2>
+                        <div class="header-title">
+                            <i data-lucide="bar-chart-3"></i>
+                            <h2>Estadísticas</h2>
+                        </div>
                     </div>
                     <div class="stats-content">
                         <div class="stat-item">
@@ -136,13 +119,17 @@
         </section>
     </main>
 
-    <footer class="footer">
-    </footer>
+    <footer class="footer"></footer>
 
-    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
     <script>
-        lucide.createIcons();
+        const INITIAL_DATA = {
+            companies: {{ companies | tojson }},
+            wheel_types: {{ wheel_types | tojson }},
+            costs: {{ costs | tojson }}
+        };
     </script>
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    <script>lucide.createIcons();</script>
 </body>
 
 </html>
